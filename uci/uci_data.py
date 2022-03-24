@@ -10,7 +10,7 @@ import numpy as np
 import pdb
 
 from utils.utils import get_known_mask, mask_edge
-
+from utils.logger import *
 
 def create_node(df, mode):
     if mode == 0:  # onehot feature node, all 1 sample node
@@ -165,12 +165,19 @@ def get_data(df_X, df_y, node_mode, train_edge_prob, split_sample_ratio, split_b
     return data
 
 
-def load_data(args):
+def load_data(args,logger = None):
     uci_path = osp.dirname(osp.abspath(inspect.getfile(inspect.currentframe())))
     if (args.data == 'mimic'):
         df_np = pd.read_csv(uci_path + '/raw_data/{}/data/wang.CSV'.format(args.data))
+        df_np = df_np.drop(['性别','anchor_age','deathtime'],axis = 1)
+        print_log(','.join(df_np.columns.to_numpy()),logger=logger)
         df_y = pd.DataFrame(df_np.iloc[:, -1:].values)
         df_X = pd.DataFrame(df_np.iloc[:, :-1].values)
+    elif(args.data == 'mimic_full'):
+        df_np = pd.read_csv(uci_path + '/raw_data/{}/data/data.csv'.format(args.data))
+        print_log(','.join(df_np.columns.to_numpy()), logger=logger)
+        df_y = pd.DataFrame(df_np.iloc[:, -1:].values)
+        df_X = pd.DataFrame(df_np.iloc[:, 1:].values)
     else:
         df_np = np.loadtxt(uci_path + '/raw_data/{}/data/data.txt'.format(args.data))
         df_y = pd.DataFrame(df_np[:, -1:])

@@ -10,11 +10,11 @@ from models.gnn_model import get_gnn
 from models.prediction_model import MLPNet
 from utils.plot_utils import plot_curve, plot_sample
 from utils.utils import build_optimizer, objectview, get_known_mask, mask_edge
+from utils.logger import *
 
 
-def train_gnn_y(data, args, log_path, device=torch.device('cpu')):
+def train_gnn_y(data, args, log_path, device=torch.device('cpu'), logger=None):
     model = get_gnn(data, args).to(device)
-
     if args.impute_hiddens == '':
         impute_hiddens = []
     else:
@@ -69,10 +69,11 @@ def train_gnn_y(data, args, log_path, device=torch.device('cpu')):
         train_y_mask[valid_mask] = False
         valid_y_mask = all_train_y_mask.clone().detach()
         valid_y_mask[~valid_mask] = False
-        print("all y num is {}, train num is {}, valid num is {}, test num is {}" \
+        msg = "all y num is {}, train num is {}, valid num is {}, test num is {}" \
             .format(
             all_train_y_mask.shape[0], torch.sum(train_y_mask),
-            torch.sum(valid_y_mask), torch.sum(test_y_mask)))
+            torch.sum(valid_y_mask), torch.sum(test_y_mask))
+        print_log(msg, logger=logger)
         Valid_rmse = []
         Valid_l1 = []
         best_valid_rmse = np.inf
@@ -157,11 +158,14 @@ def train_gnn_y(data, args, log_path, device=torch.device('cpu')):
             if args.data == 'mimic':
                 pred_test_sig = sigmoid(pred_test)
                 mse = criterion(pred_test_sig, label_test)
-                pred_test_sig[pred_test_sig.ge(0.5)] = 1
-                pred_test_sig[~pred_test_sig.ge(0.5)] = 0
                 pred_test_int = pred_test_sig.cpu().numpy()
                 label_test_int = label_test.cpu().numpy()
-                confusion = confusion_matrix(pred_test_int, label_test_int)
+
+                auc = roc_auc_score(label_test_int, pred_test_int)
+                pred_test_int[pred_test_int > 0.5] = 1
+                pred_test_int[pred_test_int < 1] = 0
+
+                confusion = confusion_matrix(label_test_int, pred_test_int)
                 TP = confusion[1, 1]
                 TN = confusion[0, 0]
                 FP = confusion[0, 1]
@@ -188,15 +192,18 @@ def train_gnn_y(data, args, log_path, device=torch.device('cpu')):
                 torch.save(model, log_path + 'model_best_test_acc.pt')
                 torch.save(impute_model, log_path + 'impute_model_best_test_acc.pt')
                 torch.save(predict_model, log_path + 'predict_model_best_test_acc.pt')
-                print('epoch: ', epoch)
-                print('loss: ', train_loss)
+                print_log('epoch: %d' % epoch, logger=logger)
+
                 if args.valid > 0.:
                     print('valid rmse: ', valid_rmse)
                     print('valid l1: ', valid_l1)
-                print('test rmse: ', test_rmse)
-                print('Accuracy: %.4f' % acc)
-                print('Sensitivity: %.4f' % sensi)
-                print('Specificity: %.4f' % speci)
+                print_log('test rmse:  %.4f' % test_rmse, logger=logger)
+                print_log('auc:  %.4f' % auc, logger=logger)
+                print_log('Accuracy:  %.4f' % acc, logger=logger)
+                print_log('Sensitivity:  %.4f' % sensi, logger=logger)
+                print_log('Specificity:  %.4f' % speci, logger=logger)
+                print_log('======-======', logger=logger)
+
             Train_loss.append(train_loss)
             Test_rmse.append(test_rmse)
 

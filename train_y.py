@@ -7,18 +7,21 @@ import os.path as osp
 import numpy as np
 import torch
 import pandas as pd
+import shutil
 
 from training.gnn_y import train_gnn_y
 from uci.uci_subparser import add_uci_subparser
 from utils.utils import auto_select_gpu
+from utils.logger import *
+
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--model_types', type=str, default='EGSAGE_EGSAGE')
-    parser.add_argument('--post_hiddens', type=str, default=None,) # default to be 1 hidden of node_dim
+    parser.add_argument('--post_hiddens', type=str, default=None, )  # default to be 1 hidden of node_dim
     parser.add_argument('--concat_states', action='store_true', default=False)
-    parser.add_argument('--norm_embs', type=str, default=None,) # default to be all true
-    parser.add_argument('--aggr', type=str, default='mean',)
+    parser.add_argument('--norm_embs', type=str, default=None, )  # default to be all true
+    parser.add_argument('--aggr', type=str, default='mean', )
     parser.add_argument('--node_dim', type=int, default=16)
     parser.add_argument('--edge_dim', type=int, default=16)
     parser.add_argument('--edge_mode', type=int, default=1)  # 0: use it as weight 1: as input to mlp
@@ -59,18 +62,20 @@ def main():
     np.random.seed(seed)
     torch.manual_seed(seed)
 
-    if args.domain == 'uci':
-        from uci.uci_data import load_data
-        data = load_data(args)
-
-    log_path = './{}/test/{}/{}/'.format(args.domain,args.data,args.log_dir)
+    log_path = './{}/test/{}/{}/'.format(args.domain, args.data, args.log_dir)
+    if os.path.exists(log_path):
+        shutil.rmtree(log_path)
     os.makedirs(log_path)
 
+    logger = get_logger('GRAPE', log_file=log_path + '/train.log')
     cmd_input = 'python ' + ' '.join(sys.argv) + '\n'
-    with open(osp.join(log_path, 'cmd_input.txt'), 'a') as f:
-        f.write(cmd_input)
+    print_log(cmd_input, logger=logger)
 
-    train_gnn_y(data, args, log_path, device)
+    if args.domain == 'uci':
+        from uci.uci_data import load_data
+        data = load_data(args, logger)
+    train_gnn_y(data, args, log_path, device, logger)
+
 
 if __name__ == '__main__':
     main()
