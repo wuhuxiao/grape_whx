@@ -52,6 +52,7 @@ def train_gnn_y(data, args, log_path, device=torch.device('cpu'), logger=None):
     Test_acc = []
     Test_sensi = []
     Test_speci = []
+    best_test_score = 0
     best_test_acc = 0
     best_test_sensi = 0
     best_test_speci = 0
@@ -105,7 +106,7 @@ def train_gnn_y(data, args, log_path, device=torch.device('cpu'), logger=None):
         pred = predict_model(X)[:, 0]
         pred_train = pred[train_y_mask]
         label_train = y[train_y_mask]
-        if args.data == 'mimic':
+        if args.data == 'mimic' or args.data == 'mimic_key':
             loss = criterion(sigmoid(pred_train), label_train)
         else:
             loss = F.mse_loss(pred_train, label_train)
@@ -155,7 +156,7 @@ def train_gnn_y(data, args, log_path, device=torch.device('cpu'), logger=None):
             pred = predict_model(X)[:, 0]
             pred_test = pred[test_y_mask]
             label_test = y[test_y_mask]
-            if args.data == 'mimic':
+            if args.data == 'mimic' or args.data == 'mimic_key':
                 pred_test_sig = sigmoid(pred_test)
                 mse = criterion(pred_test_sig, label_test)
                 pred_test_int = pred_test_sig.cpu().numpy()
@@ -185,9 +186,9 @@ def train_gnn_y(data, args, log_path, device=torch.device('cpu'), logger=None):
                 # l1 = F.l1_loss(pred_test, label_test)
             # test_l1 = l1.item()
             test_rmse = np.sqrt(mse.item())
-
-            if acc > best_test_acc:
-                best_test_acc = acc
+            best_score = acc + sensi * 2 + speci
+            if acc > 0.8 and sensi > 0.8 and speci > 0.8 and best_score>best_test_score:
+                best_test_score = best_score
                 best_valid_l1_epoch = epoch
                 torch.save(model, log_path + 'model_best_test_acc.pt')
                 torch.save(impute_model, log_path + 'impute_model_best_test_acc.pt')

@@ -173,6 +173,12 @@ def load_data(args,logger = None):
         print_log(','.join(df_np.columns.to_numpy()),logger=logger)
         df_y = pd.DataFrame(df_np.iloc[:, -1:].values)
         df_X = pd.DataFrame(df_np.iloc[:, :-1].values)
+    elif (args.data == 'mimic_key'):
+        df_np = pd.read_csv(uci_path + '/raw_data/{}/data/wang.CSV'.format(args.data))
+        df_np = df_np.drop(['性别','anchor_age','deathtime'],axis = 1)
+        print_log(','.join(df_np.columns.to_numpy()),logger=logger)
+        df_y = pd.DataFrame(df_np.iloc[:, -1:].values)
+        df_X = pd.DataFrame(df_np.iloc[:, :5].values)
     elif(args.data == 'mimic_full'):
         df_np = pd.read_csv(uci_path + '/raw_data/{}/data/data.csv'.format(args.data))
         print_log(','.join(df_np.columns.to_numpy()), logger=logger)

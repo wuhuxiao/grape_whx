@@ -1,19 +1,18 @@
-import time
 import argparse
-import sys
 import os
 import os.path as osp
+import shutil
+import sys
+import time
 
 import numpy as np
-import torch
 import pandas as pd
-import shutil
+import torch
 
 from training.gnn_y import train_gnn_y
 from uci.uci_subparser import add_uci_subparser
-from utils.utils import auto_select_gpu
 from utils.logger import *
-
+from utils.utils import auto_select_gpu
 
 def main():
     parser = argparse.ArgumentParser()
@@ -29,7 +28,7 @@ def main():
     parser.add_argument('--impute_hiddens', type=str, default='')
     parser.add_argument('--impute_activation', type=str, default='relu')
     parser.add_argument('--predict_hiddens', type=str, default='')
-    parser.add_argument('--epochs', type=int, default=20000)
+    parser.add_argument('--epochs', type=int, default=15000)
     parser.add_argument('--opt', type=str, default='adam')
     parser.add_argument('--opt_scheduler', type=str, default='none')
     parser.add_argument('--opt_restart', type=int, default=0)
@@ -40,7 +39,7 @@ def main():
     parser.add_argument('--lr', type=float, default=0.001)
     parser.add_argument('--known', type=float, default=0.8)
     parser.add_argument('--valid', type=float, default=0.)
-    parser.add_argument('--seed', type=int, default=0)
+    parser.add_argument('--seed', type=int, default=1)
     parser.add_argument('--log_dir', type=str, default='y6')
     subparsers = parser.add_subparsers()
     add_uci_subparser(subparsers)
