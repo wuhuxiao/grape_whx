@@ -39,7 +39,7 @@ def main():
     parser.add_argument('--lr', type=float, default=0.001)
     parser.add_argument('--known', type=float, default=0.8)
     parser.add_argument('--valid', type=float, default=0.)
-    parser.add_argument('--seed', type=int, default=1)
+    parser.add_argument('--seed', type=int, default=3)
     parser.add_argument('--log_dir', type=str, default='y6')
     subparsers = parser.add_subparsers()
     add_uci_subparser(subparsers)

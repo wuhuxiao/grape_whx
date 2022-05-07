@@ -10,6 +10,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\uci\raw_data\mimic\data\wang_back.CSV">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\uci\raw_data\mimic_full\data\data.csv">
           <value>
             <Attribute>

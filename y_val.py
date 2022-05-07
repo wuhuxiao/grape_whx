@@ -14,7 +14,7 @@ from utils.logger import *
 from utils.utils import auto_select_gpu
 
 
-def test_gnn_y(data, args, log_path, device=torch.device('cpu'), logger=None):
+def test_gnn_y(data, args, model_path, device=torch.device('cpu'), logger=None):
     model = get_gnn(data, args).to(device)
     if args.impute_hiddens == '':
         impute_hiddens = []
@@ -39,7 +39,7 @@ def test_gnn_y(data, args, log_path, device=torch.device('cpu'), logger=None):
                            dropout=args.dropout).to(device)
 
     # 载入训练好的模型参数
-    load_path = log_path
+    load_path = model_path
     print("loading from {} ".format(load_path))
     model = torch.load(load_path + 'model_best_test_acc.pt', map_location=device)
     impute_model = torch.load(load_path + 'impute_model_best_test_acc.pt', map_location=device)
@@ -80,7 +80,7 @@ def test_gnn_y(data, args, log_path, device=torch.device('cpu'), logger=None):
                 X = torch.reshape(X, [n_row, n_col])
                 pred = predict_model(X)[:, 0]
                 time_end = time.time()
-                print_log('time cost %.4f s'%( time_end - time_start), logger=logger)
+                # print_log('time cost %.4f s'%( time_end - time_start), logger=logger)
             pred_test = pred
             label_test = y
 
@@ -106,12 +106,15 @@ def test_gnn_y(data, args, log_path, device=torch.device('cpu'), logger=None):
             else:
                 sensi = TP / float(TP + FN)
             speci = TN / float(TN + FP)
-
-            print_log('auc:  %.4f' % auc, logger=logger)
-            print_log('Accuracy:  %.4f' % acc, logger=logger)
-            print_log('Sensitivity:  %.4f' % sensi, logger=logger)
-            print_log('Specificity:  %.4f' % speci, logger=logger)
-            print_log('======-======', logger=logger)
+            if i == 0:
+                print_log('auc:  %.4f' % auc, logger=logger)
+                print_log('Accuracy:  %.4f' % acc, logger=logger)
+                print_log('Sensitivity:  %.4f' % sensi, logger=logger)
+                print_log('Specificity:  %.4f' % speci, logger=logger)
+                print_log('======-======', logger=logger)
+            else:
+                print_log('Accuracy:  %.4f' % acc, logger=logger)
+                print_log('======-======', logger=logger)
 
 
 def main():
@@ -174,6 +177,7 @@ def main():
     torch.manual_seed(seed)
 
     log_path = './{}/test/{}/{}/'.format(args.domain, args.data, args.log_dir)
+    model_path = './{}/test/{}/y6/'.format(args.domain, args.data)
     if not os.path.exists(log_path):
         os.makedirs(log_path)
 
@@ -184,7 +188,7 @@ def main():
     if args.domain == 'uci':
         from uci.uci_data import load_data
         data = load_data(args, logger)
-    test_gnn_y(data, args, log_path, device, logger)
+    test_gnn_y(data, args, model_path, device, logger)
 
 
 if __name__ == '__main__':
