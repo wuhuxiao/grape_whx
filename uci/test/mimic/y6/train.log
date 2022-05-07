@@ -1,0 +1,31 @@
+2022-05-07 17:41:45,864 - GRAPE - INFO - python D:/project/siat/GRAPE/train_y.py uci --data mimic
+
+2022-05-07 17:41:45,870 - GRAPE - INFO - 心率,收缩压,舒张压,呼吸频率,体温,PCO2,PH,PO2,乳酸,剩余碱,红细胞比积,血小板,血红蛋白,Rate
+2022-05-07 17:42:37,432 - GRAPE - INFO - epoch: 5051
+2022-05-07 17:42:37,432 - GRAPE - INFO - test rmse:  0.4977
+2022-05-07 17:42:37,432 - GRAPE - INFO - auc:  0.9702
+2022-05-07 17:42:37,432 - GRAPE - INFO - Accuracy:  0.9231
+2022-05-07 17:42:37,432 - GRAPE - INFO - Sensitivity:  1.0000
+2022-05-07 17:42:37,432 - GRAPE - INFO - Specificity:  0.9149
+2022-05-07 17:42:37,432 - GRAPE - INFO - ======-======
+2022-05-07 17:42:55,387 - GRAPE - INFO - epoch: 6910
+2022-05-07 17:42:55,394 - GRAPE - INFO - test rmse:  0.3356
+2022-05-07 17:42:55,394 - GRAPE - INFO - auc:  0.9872
+2022-05-07 17:42:55,394 - GRAPE - INFO - Accuracy:  0.9423
+2022-05-07 17:42:55,394 - GRAPE - INFO - Sensitivity:  1.0000
+2022-05-07 17:42:55,394 - GRAPE - INFO - Specificity:  0.9362
+2022-05-07 17:42:55,394 - GRAPE - INFO - ======-======
+2022-05-07 17:42:55,447 - GRAPE - INFO - epoch: 6915
+2022-05-07 17:42:55,447 - GRAPE - INFO - test rmse:  0.3225
+2022-05-07 17:42:55,447 - GRAPE - INFO - auc:  0.9915
+2022-05-07 17:42:55,447 - GRAPE - INFO - Accuracy:  0.9615
+2022-05-07 17:42:55,447 - GRAPE - INFO - Sensitivity:  1.0000
+2022-05-07 17:42:55,447 - GRAPE - INFO - Specificity:  0.9574
+2022-05-07 17:42:55,447 - GRAPE - INFO - ======-======
+2022-05-07 17:42:55,587 - GRAPE - INFO - epoch: 6929
+2022-05-07 17:42:55,587 - GRAPE - INFO - test rmse:  0.2953
+2022-05-07 17:42:55,587 - GRAPE - INFO - auc:  0.9957
+2022-05-07 17:42:55,587 - GRAPE - INFO - Accuracy:  0.9808
+2022-05-07 17:42:55,587 - GRAPE - INFO - Sensitivity:  1.0000
+2022-05-07 17:42:55,587 - GRAPE - INFO - Specificity:  0.9787
+2022-05-07 17:42:55,587 - GRAPE - INFO - ======-======

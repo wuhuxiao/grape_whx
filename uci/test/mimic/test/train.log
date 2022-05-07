@@ -1,0 +1,13 @@
+2022-05-07 17:45:42,774 - GRAPE - INFO - python D:/project/siat/GRAPE/y_val.py
+
+2022-05-07 17:45:43,031 - GRAPE - INFO - 心率,收缩压,舒张压,呼吸频率,体温,PCO2,PH,PO2,乳酸,剩余碱,红细胞比积,血小板,血红蛋白,Rate
+2022-05-07 17:45:45,096 - GRAPE - INFO - 无指标缺失
+2022-05-07 17:45:45,097 - GRAPE - INFO - time cost 0.7581 s
+2022-05-07 17:45:45,098 - GRAPE - INFO - auc:  0.9905
+2022-05-07 17:45:45,098 - GRAPE - INFO - Accuracy:  0.9604
+2022-05-07 17:45:45,098 - GRAPE - INFO - Sensitivity:  0.8542
+2022-05-07 17:45:45,098 - GRAPE - INFO - Specificity:  0.9935
+2022-05-07 17:45:45,098 - GRAPE - INFO - ======-======
+2022-05-07 17:45:45,100 - GRAPE - INFO - 20%指标缺失
+2022-05-07 17:45:45,101 - GRAPE - INFO - Accuracy:  0.9406
+2022-05-07 17:45:45,102 - GRAPE - INFO - ======-======
